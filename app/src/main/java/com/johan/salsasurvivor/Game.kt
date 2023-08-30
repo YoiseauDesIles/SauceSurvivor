@@ -13,6 +13,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var gameLoop : GameLoop
     private lateinit var player : Player
     private lateinit var joystick : Joystick
+    private lateinit var enemy : Enemy
 
     init {
         //get surface holder and add callback
@@ -20,9 +21,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         surfaceHolder.addCallback(this)
 
         gameLoop = GameLoop(this, surfaceHolder)
-
+        enemy = Enemy()
         joystick = Joystick(275, 700, 70, 40)
-        player = Player(getContext(), 500.0, 500.0, 30.0)
+        player = Player(getContext(), joystick,500.0, 500.0, 30.0)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -100,6 +101,6 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     fun update() {
         joystick.update()
-        player.update(joystick)
+        player.update()
     }
 }
