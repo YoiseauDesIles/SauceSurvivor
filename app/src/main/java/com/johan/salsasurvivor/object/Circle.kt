@@ -1,9 +1,8 @@
-package com.johan.salsasurvivor
+package com.johan.salsasurvivor.`object`
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import androidx.core.content.ContextCompat
 
 abstract class Circle(
     context : Context,

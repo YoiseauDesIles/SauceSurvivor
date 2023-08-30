@@ -7,6 +7,8 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import com.johan.salsasurvivor.`object`.Enemy
+import com.johan.salsasurvivor.`object`.Player
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
@@ -21,9 +23,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         surfaceHolder.addCallback(this)
 
         gameLoop = GameLoop(this, surfaceHolder)
-        enemy = Enemy()
+
         joystick = Joystick(275, 700, 70, 40)
         player = Player(getContext(), joystick,500.0, 500.0, 30.0)
+        enemy = Enemy(getContext(),  player,700.0, 200.0, 30.0)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -70,14 +73,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     }
 
-    override fun draw(canvas: Canvas?) {
-        super.draw(canvas)
-        drawUPS(canvas)
-        drawFPS(canvas)
 
-        joystick.draw(canvas)
-        player.draw(canvas)
-    }
 
     public fun drawUPS(canvas : Canvas?) {
 
@@ -102,5 +98,16 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     fun update() {
         joystick.update()
         player.update()
+        enemy.update()
+    }
+
+    override fun draw(canvas: Canvas?) {
+        super.draw(canvas)
+        drawUPS(canvas)
+        drawFPS(canvas)
+
+        joystick.draw(canvas)
+        player.draw(canvas)
+        enemy.draw(canvas)
     }
 }

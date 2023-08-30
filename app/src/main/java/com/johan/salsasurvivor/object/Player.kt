@@ -1,9 +1,10 @@
-package com.johan.salsasurvivor
+package com.johan.salsasurvivor.`object`
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
 import androidx.core.content.ContextCompat
+import com.johan.salsasurvivor.GameLoop
+import com.johan.salsasurvivor.Joystick
+import com.johan.salsasurvivor.R
 
 class Player(context : Context,
              private val joystick: Joystick,
@@ -17,8 +18,8 @@ class Player(context : Context,
         positionY,
         radius){
 
-    private val SPEED_PIXELS_PER_SECONDS = 400.0
-    private val MAX_SPEED : Double = SPEED_PIXELS_PER_SECONDS / GameLoop.MAX_UPS
+
+    private val MAX_SPEED : Double = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS
 
 
     init {
@@ -32,6 +33,10 @@ class Player(context : Context,
 
         positionX += velocityX
         positionY += velocityY
+    }
+
+    companion object{
+        public val SPEED_PIXELS_PER_SECOND = 400.0
     }
 
 }
