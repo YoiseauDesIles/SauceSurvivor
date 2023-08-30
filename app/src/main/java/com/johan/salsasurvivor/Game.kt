@@ -3,6 +3,7 @@ package com.johan.salsasurvivor
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
@@ -10,7 +11,7 @@ import androidx.core.content.ContextCompat
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private lateinit var gameLoop : GameLoop
-    private val currContext = context
+    private lateinit var player : Player
 
     init {
         //get surface holder and add callback
@@ -19,6 +20,27 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         gameLoop = GameLoop(this, surfaceHolder)
 
+        player = Player(getContext(), 500.0, 500.0, 30.0)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+
+        //handle touch event actions
+        when(event?.getAction()){
+            MotionEvent.ACTION_DOWN -> {
+                player.setPosition(event.x.toDouble(), event.y.toDouble())
+                return true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                player.setPosition(event.x.toDouble(), event.y.toDouble())
+                return true
+            }
+
+        }
+
+
+
+        return super.onTouchEvent(event)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -37,6 +59,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         super.draw(canvas)
         drawUPS(canvas)
         drawFPS(canvas)
+
+        player.draw(canvas)
     }
 
     public fun drawUPS(canvas : Canvas?) {
@@ -60,6 +84,6 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     }
 
     fun update() {
-
+        player.update()
     }
 }
