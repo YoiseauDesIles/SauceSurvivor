@@ -12,6 +12,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private lateinit var gameLoop : GameLoop
     private lateinit var player : Player
+    private lateinit var joystick : Joystick
 
     init {
         //get surface holder and add callback
@@ -20,6 +21,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         gameLoop = GameLoop(this, surfaceHolder)
 
+        joystick = Joystick(275, 700, 70, 40)
         player = Player(getContext(), 500.0, 500.0, 30.0)
     }
 
@@ -28,12 +30,24 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         //handle touch event actions
         when(event?.getAction()){
             MotionEvent.ACTION_DOWN -> {
-                player.setPosition(event.x.toDouble(), event.y.toDouble())
+                if (joystick.isPressed(event.x.toDouble(), event.y.toDouble())) {
+                    joystick.isPressed = true
+                }
+                //player.setPosition(event.x.toDouble(), event.y.toDouble())
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
-                player.setPosition(event.x.toDouble(), event.y.toDouble())
+                if (joystick.isPressed){
+                    joystick.setActuator(event.x.toDouble(), event.y.toDouble())
+                }
+                //player.setPosition(event.x.toDouble(), event.y.toDouble())
                 return true
+            }
+            MotionEvent.ACTION_UP -> {
+                joystick.isPressed = false
+                joystick.resetActuator()
+                return true
+
             }
 
         }
@@ -60,6 +74,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         drawUPS(canvas)
         drawFPS(canvas)
 
+        joystick.draw(canvas)
         player.draw(canvas)
     }
 
@@ -84,6 +99,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     }
 
     fun update() {
-        player.update()
+        joystick.update()
+        player.update(joystick)
     }
 }

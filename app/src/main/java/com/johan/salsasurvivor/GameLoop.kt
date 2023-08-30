@@ -5,12 +5,16 @@ import android.view.SurfaceHolder
 
 class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder) : Thread() {
 
-    private val MAX_UPS : Double = 60.0
+
+
     private val UPS_PERIOD : Double = 1E+3/MAX_UPS
     private var isRunning : Boolean = false
     private var averageUPS : Double = 0.0
     private var averageFPS : Double = 0.0
 
+    companion object{
+        const val MAX_UPS : Double = 60.0
+    }
 
     fun getAverageUPS(): Any {
     return averageUPS
