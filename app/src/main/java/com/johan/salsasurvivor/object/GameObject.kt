@@ -39,6 +39,7 @@ abstract class GameObject(positionX : Double, positionY : Double) {
 
     }
 
+
     companion object{
         @JvmStatic
         protected fun getDistanceBetweenObjects(obj1: GameObject, obj2: GameObject): Double {

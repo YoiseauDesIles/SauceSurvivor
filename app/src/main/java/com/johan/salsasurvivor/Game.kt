@@ -3,10 +3,13 @@ package com.johan.salsasurvivor
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Build
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.johan.salsasurvivor.`object`.Circle
 import com.johan.salsasurvivor.`object`.Enemy
 import com.johan.salsasurvivor.`object`.Player
 
@@ -15,7 +18,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var gameLoop : GameLoop
     private lateinit var player : Player
     private lateinit var joystick : Joystick
-    private lateinit var enemy : Enemy
+    private var enemyList : MutableList<Enemy> = mutableListOf()
 
     init {
         //get surface holder and add callback
@@ -26,7 +29,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         joystick = Joystick(275, 700, 70, 40)
         player = Player(getContext(), joystick,500.0, 500.0, 30.0)
-        enemy = Enemy(getContext(),  player,700.0, 200.0, 30.0)
+
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -92,13 +95,28 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         val color : Int = ContextCompat.getColor(context, R.color.magenta)
         paint.color = color
         paint.textSize = 50F
-        canvas?.drawText("FPS : " + averageUPS, 100F, 200F, paint)
+        canvas?.drawText("FPS : $averageUPS", 100F, 200F, paint)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun update() {
         joystick.update()
         player.update()
-        enemy.update()
+
+        if (Enemy.readyToSpawn()){
+            enemyList.add(Enemy(context,  player))
+        }
+
+        //Update state of each enemy
+        enemyList.forEach {
+            it.update()
+        }
+
+        //Iterate through enemyList and check for collision
+        //val iteratorEnemy : Iterator<Enemy> = enemyList.iterator()
+        enemyList.removeIf { Circle.isColliding(it, player) }
+
+
     }
 
     override fun draw(canvas: Canvas?) {
@@ -108,6 +126,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         joystick.draw(canvas)
         player.draw(canvas)
-        enemy.draw(canvas)
+
+        //Draw all enemies
+        enemyList.forEach {
+            it.draw(canvas)
+        }
     }
 }

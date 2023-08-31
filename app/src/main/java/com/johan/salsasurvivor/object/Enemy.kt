@@ -12,7 +12,7 @@ class Enemy(context : Context,
             radius : Double ) :
     Circle(
         context,
-        ContextCompat.getColor(context, R.color.player),
+        ContextCompat.getColor(context, R.color.enemy),
         positionX,
         positionY,
         radius)  {
@@ -21,8 +21,13 @@ class Enemy(context : Context,
     private val MAX_SPEED : Double = SPEED_PIXELS_PER_SECONDS / GameLoop.MAX_UPS
 
 
-    init {
-        paint.color = ContextCompat.getColor(context, R.color.enemy)
+    constructor(context: Context, player: Player) : this(
+        context,
+        player,
+        Math.random() * 1000,
+        Math.random() * 1000,
+        30.0) {
+
     }
 
     override fun update() {
@@ -47,9 +52,30 @@ class Enemy(context : Context,
             velocityY = 0.0
         }
 
+        //update the position of the enemy
         positionX += velocityX
         positionY += velocityY
-        //update the position of the enemy
+
+    }
+
+    companion object {
+
+        private val UPDATES_PER_SPAWN : Double = GameLoop.MAX_UPS
+        private var SPAWNS_PER_MINUTE : Double = 20.0
+        private var SPAWNS_PER_SECOND : Double = SPAWNS_PER_MINUTE / 60.0
+        private var updatesUntilNextSpawn : Double = UPDATES_PER_SPAWN/SPAWNS_PER_SECOND
+
+        @JvmStatic
+        public fun readyToSpawn() : Boolean {
+
+            if (updatesUntilNextSpawn <= 0) {
+                updatesUntilNextSpawn += UPDATES_PER_SPAWN
+                return true
+            } else {
+                updatesUntilNextSpawn--
+                return false
+            }
+        }
     }
 
 }
