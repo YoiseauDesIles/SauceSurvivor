@@ -11,11 +11,10 @@ abstract class Circle(
     positionY : Double,
     protected var radius : Double) : GameObject(positionX, positionY){
 
-    protected lateinit var paint : Paint
+    protected var paint : Paint = Paint()
 
 
     init {
-        paint = Paint()
         paint.color = color
     }
 
@@ -32,7 +31,7 @@ abstract class Circle(
             val distanceToCollision : Double = obj1.radius + obj2.radius
 
             return distance < distanceToCollision
-            
+
        }
 
     }

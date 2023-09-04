@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat
 import com.johan.salsasurvivor.GameLoop
 import com.johan.salsasurvivor.Joystick
 import com.johan.salsasurvivor.R
+import com.johan.salsasurvivor.Utils
 
 class Player(context : Context,
              private val joystick: Joystick,
@@ -28,11 +29,21 @@ class Player(context : Context,
 
 
     override fun update() {
+        //Update velocity based on actuator of joystick
         velocityX = joystick.actuatorX * MAX_SPEED
         velocityY = joystick.actuatorY * MAX_SPEED
 
+        //update position
         positionX += velocityX
         positionY += velocityY
+
+        //update direction from velocity
+        if (velocityX != 0.0 || velocityY != 0.0) {
+            //Normalise velocity to get direction(unit vector of velocity)
+            val distance : Double = Utils.getDistanceBetweenPoints(0.0, 0.0, velocityX, velocityY)
+            directionX = velocityX / distance
+            directionY = velocityY / distance
+        }
     }
 
     companion object{

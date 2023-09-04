@@ -17,7 +17,7 @@ class Enemy(context : Context,
         positionY,
         radius)  {
 
-    private val SPEED_PIXELS_PER_SECONDS = Player.SPEED_PIXELS_PER_SECOND * 0.6
+    private val SPEED_PIXELS_PER_SECONDS = Player.SPEED_PIXELS_PER_SECOND * 0.2
     private val MAX_SPEED : Double = SPEED_PIXELS_PER_SECONDS / GameLoop.MAX_UPS
 
 
@@ -33,8 +33,8 @@ class Enemy(context : Context,
     override fun update() {
 
         //Calculate vector from enemy to player (in x and y)
-        val distanceToPlayerX : Double = player.posX - positionX
-        val distanceToPlayerY : Double = player.posY - positionY
+        val distanceToPlayerX : Double = player.getPositionX() - positionX
+        val distanceToPlayerY : Double = player.getPositionY() - positionY
 
         //Calculate (absolute) distance between enemy and player
         val distanceToPlayer : Double = getDistanceBetweenObjects(this, player)

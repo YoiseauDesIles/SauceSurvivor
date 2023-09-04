@@ -9,10 +9,6 @@ import kotlin.math.sqrt
 class Joystick(centerPositionX : Int,centerPositionY : Int, private var outerCircleRadius : Int, private var innerCircleRadius : Int ) {
 
     var isPressed: Boolean = false
-        get() = field
-        set(value) {
-            field = value
-        }
 
 
     private var innerCircleCenterPositionX : Int
@@ -76,10 +72,9 @@ class Joystick(centerPositionX : Int,centerPositionY : Int, private var outerCir
     }
 
     fun isPressed(touchPositionX: Double, touchPositionY: Double): Boolean {
-        val joystickCenterToTouchDistance = sqrt(
-             (outerCircleCenterPositionX - touchPositionX).pow(2.0) +
-                (outerCircleCenterPositionY - touchPositionY).pow(2.0)
-        )
+        val joystickCenterToTouchDistance = Utils.getDistanceBetweenPoints(
+            outerCircleCenterPositionX.toDouble(), outerCircleCenterPositionY.toDouble(),
+            touchPositionX, touchPositionY)
         return joystickCenterToTouchDistance < outerCircleRadius
 
     }
@@ -87,7 +82,7 @@ class Joystick(centerPositionX : Int,centerPositionY : Int, private var outerCir
     fun setActuator(touchPositionX: Double, touchPositionY: Double) {
         val deltaX : Double = touchPositionX - outerCircleCenterPositionX
         val deltaY : Double = touchPositionY - outerCircleCenterPositionY
-        val deltaDistance = sqrt(deltaX.pow(2.0) + deltaY.pow(2.0))
+        val deltaDistance = Utils.getDistanceBetweenPoints(0.0, 0.0, deltaX, deltaY)
 
         if (deltaDistance < outerCircleRadius){
             actuatorX = deltaX/outerCircleRadius
