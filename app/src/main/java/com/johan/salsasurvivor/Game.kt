@@ -158,15 +158,15 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             enemyList.removeIf { Circle.isColliding(it,  spell) }
         }*/
 
+        //Check for enemy collision between the player or the spell and the enemy
         val enemyIt : MutableIterator<Enemy> = enemyList.iterator()
-
-
         while (enemyIt.hasNext()) {
 
             //delete an enemy if he collides the player
             val currEnemy : Circle = enemyIt.next()
             if (Circle.isColliding(currEnemy, player)){
                 enemyIt.remove()
+                player.setHealthPoint(player.getHealthPoints() - 1)
                 continue
             }
 
@@ -182,9 +182,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
                     break
                 }
             }
-
         }
-
 
     }
 

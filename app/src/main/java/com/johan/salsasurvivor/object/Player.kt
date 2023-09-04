@@ -1,6 +1,7 @@
 package com.johan.salsasurvivor.`object`
 
 import android.content.Context
+import android.graphics.Canvas
 import androidx.core.content.ContextCompat
 import com.johan.salsasurvivor.GameLoop
 import com.johan.salsasurvivor.Joystick
@@ -20,7 +21,9 @@ class Player(context : Context,
         radius){
 
 
+    private val healthBar : HealthBar = HealthBar(context, this)
     private val MAX_SPEED : Double = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS
+    private var healthPoints : Int = Player.MAX_HEALTH_POINTS
 
 
     init {
@@ -46,8 +49,24 @@ class Player(context : Context,
         }
     }
 
+    public override fun draw(canvas: Canvas?) {
+        super.draw(canvas)
+        healthBar.draw(canvas)
+
+    }
+
+    fun getHealthPoints(): Int {
+        return this.healthPoints
+    }
+
+    fun setHealthPoint(healthPoints: Int) {
+        if (healthPoints >= 0)
+            this.healthPoints = healthPoints
+    }
+
     companion object{
-        public val SPEED_PIXELS_PER_SECOND = 400.0
+        public const val SPEED_PIXELS_PER_SECOND = 400.0
+        public const val MAX_HEALTH_POINTS = 10
     }
 
 }
