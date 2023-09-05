@@ -1,7 +1,9 @@
 package com.johan.salsasurvivor
 
 import android.graphics.Canvas
+import android.os.Build
 import android.view.SurfaceHolder
+import androidx.annotation.RequiresApi
 
 class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder) : Thread() {
 
@@ -29,6 +31,7 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
         start()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun run() {
         super.run()
 

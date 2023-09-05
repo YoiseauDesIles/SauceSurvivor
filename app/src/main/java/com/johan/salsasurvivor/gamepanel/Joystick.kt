@@ -1,10 +1,9 @@
-package com.johan.salsasurvivor
+package com.johan.salsasurvivor.gamepanel
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import kotlin.math.pow
-import kotlin.math.sqrt
+import com.johan.salsasurvivor.Utils
 
 class Joystick(centerPositionX : Int,centerPositionY : Int, private var outerCircleRadius : Int, private var innerCircleRadius : Int ) {
 
@@ -74,7 +73,8 @@ class Joystick(centerPositionX : Int,centerPositionY : Int, private var outerCir
     fun isPressed(touchPositionX: Double, touchPositionY: Double): Boolean {
         val joystickCenterToTouchDistance = Utils.getDistanceBetweenPoints(
             outerCircleCenterPositionX.toDouble(), outerCircleCenterPositionY.toDouble(),
-            touchPositionX, touchPositionY)
+            touchPositionX, touchPositionY
+        )
         return joystickCenterToTouchDistance < outerCircleRadius
 
     }

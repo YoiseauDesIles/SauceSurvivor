@@ -1,10 +1,11 @@
-package com.johan.salsasurvivor.`object`
+package com.johan.salsasurvivor.gamepanel
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.core.content.ContextCompat
 import com.johan.salsasurvivor.R
+import com.johan.salsasurvivor.gameobject.Player
 
 /**
  * Healthbar displays the player health to the screen

@@ -1,12 +1,13 @@
-package com.johan.salsasurvivor.`object`
+package com.johan.salsasurvivor.gameobject
 
 import android.content.Context
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat
 import com.johan.salsasurvivor.GameLoop
-import com.johan.salsasurvivor.Joystick
+import com.johan.salsasurvivor.gamepanel.Joystick
 import com.johan.salsasurvivor.R
 import com.johan.salsasurvivor.Utils
+import com.johan.salsasurvivor.gamepanel.HealthBar
 
 class Player(context : Context,
              private val joystick: Joystick,

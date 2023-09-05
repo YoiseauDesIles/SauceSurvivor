@@ -1,4 +1,4 @@
-package com.johan.salsasurvivor.`object`
+package com.johan.salsasurvivor.gameobject
 
 import android.content.Context
 import android.graphics.Canvas

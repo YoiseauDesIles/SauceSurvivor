@@ -2,24 +2,26 @@ package com.johan.salsasurvivor
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Build
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
-import com.johan.salsasurvivor.`object`.Circle
-import com.johan.salsasurvivor.`object`.Enemy
-import com.johan.salsasurvivor.`object`.Player
-import com.johan.salsasurvivor.`object`.Spell
+import com.johan.salsasurvivor.gameobject.Circle
+import com.johan.salsasurvivor.gameobject.Enemy
+import com.johan.salsasurvivor.gameobject.Player
+import com.johan.salsasurvivor.gameobject.Spell
+import com.johan.salsasurvivor.gamepanel.GameOver
+import com.johan.salsasurvivor.gamepanel.Joystick
+import com.johan.salsasurvivor.gamepanel.Performance
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private lateinit var gameLoop : GameLoop
     private lateinit var player : Player
     private lateinit var joystick : Joystick
+    private lateinit var gameOver : GameOver
+    private lateinit var performance : Performance
     private var enemyList : MutableList<Enemy> = mutableListOf()
     private var spellList : MutableList<Spell> = mutableListOf()
     private var joystickPointerId : Int = 0
@@ -32,8 +34,13 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         gameLoop = GameLoop(this, surfaceHolder)
 
+        //initialize game panels
+        performance = Performance(context, gameLoop)
+        gameOver = GameOver(context)
         joystick = Joystick(275, 700, 70, 40)
-        player = Player(getContext(), joystick,500.0, 500.0, 20.0)
+
+         //initialize game objects
+        player = Player(context, joystick,500.0, 500.0, 20.0)
 
     }
 
@@ -108,29 +115,15 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     }
 
 
-
-    public fun drawUPS(canvas : Canvas?) {
-
-        val averageUPS : String = gameLoop.getAverageUPS().toString()
-        val paint : Paint = Paint()
-        val color : Int = ContextCompat.getColor(context, R.color.magenta)
-        paint.color = color
-        paint.textSize = 50F
-        canvas?.drawText("UPS : " + averageUPS, 100F, 100F, paint)
-    }
-
-    public fun drawFPS(canvas : Canvas?) {
-
-        val averageUPS : String = gameLoop.getAverageFPS().toString()
-        val paint : Paint = Paint()
-        val color : Int = ContextCompat.getColor(context, R.color.magenta)
-        paint.color = color
-        paint.textSize = 50F
-        canvas?.drawText("FPS : $averageUPS", 100F, 200F, paint)
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     fun update() {
+
+        //Stop updating the game if the player is dead
+        if (player.getHealthPoints() <= 0) {
+            return
+        }
+
+        //Update game state
         joystick.update()
         player.update()
 
@@ -188,10 +181,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
-        drawUPS(canvas)
-        drawFPS(canvas)
+        performance.drawUPS(canvas)
+        performance.drawFPS(canvas)
 
-        joystick.draw(canvas)
+        //draw game objects
         player.draw(canvas)
 
         //Draw all enemies
@@ -204,6 +197,15 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             it.draw(canvas)
         }
 
+
+        //draw game panels
+        joystick.draw(canvas)
+        performance.draw(canvas)
+
+        // Draw Game over
+        if (player.getHealthPoints() <= 0) {
+            gameOver.draw(canvas)
+        }
 
     }
 }
