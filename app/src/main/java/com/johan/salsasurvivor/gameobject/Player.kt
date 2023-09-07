@@ -9,19 +9,20 @@ import com.johan.salsasurvivor.gamepanel.Joystick
 import com.johan.salsasurvivor.R
 import com.johan.salsasurvivor.Utils
 import com.johan.salsasurvivor.gamepanel.HealthBar
+import com.johan.salsasurvivor.graphics.Sprite
 
 class Player(context : Context,
              private val joystick: Joystick,
              positionX : Double,
              positionY : Double,
-             radius : Double ) :
+             radius : Double,
+             private val sprite: Sprite) :
     Circle(
         context,
         ContextCompat.getColor(context, R.color.player),
         positionX,
         positionY,
         radius){
-
 
     private val healthBar : HealthBar = HealthBar(context, this)
     private val MAX_SPEED : Double = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS
@@ -52,7 +53,12 @@ class Player(context : Context,
     }
 
     public override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
-        super.draw(canvas, gameDisplay)
+
+        sprite.draw(
+            canvas,
+            gameDisplay.gameToDisplayCoordinatesX(getPositionX()).toInt() - sprite.getWidth()/2,
+            gameDisplay.gameToDisplayCoordinatesY(getPositionY()).toInt() - sprite.getHeight()/2
+        )
         healthBar.draw(canvas, gameDisplay)
 
     }
