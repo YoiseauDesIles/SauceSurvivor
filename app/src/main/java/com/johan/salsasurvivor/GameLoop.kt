@@ -2,8 +2,10 @@ package com.johan.salsasurvivor
 
 import android.graphics.Canvas
 import android.os.Build
+import android.util.Log
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresApi
+import java.io.InterruptedIOException
 
 class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder) : Thread() {
 
@@ -27,12 +29,14 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
     }
 
     fun startLoop() {
+        Log.d("GameLoop.java", "startLoop()")
         isRunning = true
         start()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun run() {
+        Log.d("GameLoop.java", "run()")
         super.run()
 
         //Declare time and cycle count variables
@@ -42,8 +46,6 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
         var startTime : Long
         var elapsedTime : Long
         var sleepTime : Long
-
-
 
 
         //Game loop
@@ -102,6 +104,17 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
         }
     }
 
+    fun stopLoop() {
+        Log.d("GameLoop.java", "stopLoop()")
+        isRunning = false
+        // wait for thread to join
+        try {
+            join()
+        } catch (e :InterruptedException) {
+            e.printStackTrace()
+        }
+
+    }
 
 
 }

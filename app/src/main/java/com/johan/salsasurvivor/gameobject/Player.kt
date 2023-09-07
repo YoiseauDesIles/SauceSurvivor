@@ -3,6 +3,7 @@ package com.johan.salsasurvivor.gameobject
 import android.content.Context
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat
+import com.johan.salsasurvivor.GameDisplay
 import com.johan.salsasurvivor.GameLoop
 import com.johan.salsasurvivor.gamepanel.Joystick
 import com.johan.salsasurvivor.R
@@ -50,9 +51,9 @@ class Player(context : Context,
         }
     }
 
-    public override fun draw(canvas: Canvas?) {
-        super.draw(canvas)
-        healthBar.draw(canvas)
+    public override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
+        super.draw(canvas, gameDisplay)
+        healthBar.draw(canvas, gameDisplay)
 
     }
 

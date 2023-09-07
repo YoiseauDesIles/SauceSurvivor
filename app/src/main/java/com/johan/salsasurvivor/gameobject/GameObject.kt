@@ -1,6 +1,7 @@
 package com.johan.salsasurvivor.gameobject
 
 import android.graphics.Canvas
+import com.johan.salsasurvivor.GameDisplay
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -13,7 +14,7 @@ abstract class GameObject(protected var positionX : Double, protected var positi
     protected var directionY : Double = 0.0
 
 
-    abstract fun draw(canvas: Canvas?);
+    abstract fun draw(canvas: Canvas?, gameDisplay: GameDisplay);
 
     abstract fun update()
 

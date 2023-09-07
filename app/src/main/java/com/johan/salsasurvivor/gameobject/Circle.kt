@@ -3,6 +3,7 @@ package com.johan.salsasurvivor.gameobject
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import com.johan.salsasurvivor.GameDisplay
 
 abstract class Circle(
     context : Context,
@@ -19,8 +20,14 @@ abstract class Circle(
     }
 
 
-    override fun draw(canvas: Canvas?) {
-        canvas?.drawCircle(positionX.toFloat(), positionY.toFloat(), radius.toFloat(), paint)
+    override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
+
+        canvas?.drawCircle(
+            gameDisplay.gameToDisplayCoordinatesX(positionX).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(positionY).toFloat(),
+            radius.toFloat(),
+            paint)
+
     }
 
     companion object {

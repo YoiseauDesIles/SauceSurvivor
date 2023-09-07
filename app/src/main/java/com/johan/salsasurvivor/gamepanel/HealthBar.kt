@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.core.content.ContextCompat
+import com.johan.salsasurvivor.GameDisplay
 import com.johan.salsasurvivor.R
 import com.johan.salsasurvivor.gameobject.Player
 
@@ -25,7 +26,7 @@ class HealthBar(context : Context, private val player : Player) {
         healthPaint.color = healthColor
     }
 
-    public fun draw(canvas : Canvas?) {
+    public fun draw(canvas : Canvas?, gameDisplay: GameDisplay) {
         val x : Float = player.getPositionX().toFloat()
         val y : Float = player.getPositionY().toFloat()
         val distanceToPlayer : Float = 30.0F
@@ -38,7 +39,12 @@ class HealthBar(context : Context, private val player : Player) {
         val borderBottom : Float = y - distanceToPlayer
         val borderTop : Float = borderBottom - height
 
-        canvas?.drawRect(borderLeft, borderTop, borderRight, borderBottom, borderPaint)
+        canvas?.drawRect(
+            gameDisplay.gameToDisplayCoordinatesX(borderLeft.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(borderTop.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesX(borderRight.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(borderBottom.toDouble()).toFloat(),
+            borderPaint)
 
 
         //draw health
@@ -49,6 +55,11 @@ class HealthBar(context : Context, private val player : Player) {
         val healthBottom : Float = (borderBottom - margin ).toFloat()
         val healthTop : Float = (healthBottom - healthHeight).toFloat()
 
-        canvas?.drawRect(healthLeft, healthTop, healthRight, healthBottom, healthPaint)
+        canvas?.drawRect(
+            gameDisplay.gameToDisplayCoordinatesX(healthLeft.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(healthTop.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesX(healthRight.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(healthBottom.toDouble()).toFloat(),
+            healthPaint)
     }
 }
