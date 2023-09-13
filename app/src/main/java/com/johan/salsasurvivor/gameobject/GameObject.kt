@@ -24,6 +24,11 @@ abstract class GameObject(protected var positionX : Double, protected var positi
 
     }
 
+
+    @JvmName("getVelocityX1")
+    public fun getVelocityX() = velocityX
+    @JvmName("getVelocityY1")
+    public fun getVelocityY() = velocityY
     @JvmName("getPositionX1")
     public fun getPositionX() = positionX
     @JvmName("getPositionY1")

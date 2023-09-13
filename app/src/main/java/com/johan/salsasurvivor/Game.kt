@@ -18,7 +18,9 @@ import com.johan.salsasurvivor.gameobject.Spell
 import com.johan.salsasurvivor.gamepanel.GameOver
 import com.johan.salsasurvivor.gamepanel.Joystick
 import com.johan.salsasurvivor.gamepanel.Performance
+import com.johan.salsasurvivor.graphics.Animator
 import com.johan.salsasurvivor.graphics.SpriteSheet
+import com.johan.salsasurvivor.map.TileMap
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
@@ -28,6 +30,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var gameOver : GameOver
     private lateinit var performance : Performance
     private lateinit var gameDisplay : GameDisplay
+    private lateinit var tileMap: TileMap
     private var enemyList : MutableList<Enemy> = mutableListOf()
     private var spellList : MutableList<Spell> = mutableListOf()
     private var joystickPointerId : Int = 0
@@ -47,7 +50,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
          //initialize game objects
         val spriteSheet = SpriteSheet(context)
-        player = Player(context, joystick,500.0, 500.0, 32.0, spriteSheet.getPlayerSprite())
+        val animator : Animator = Animator(spriteSheet.getPlayerSpriteArray())
+        player = Player(context, joystick,500.0, 500.0, 32.0, animator)
 
         //initialize game display and center it around the player
         val displayMetrics : DisplayMetrics = DisplayMetrics()
@@ -63,6 +67,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         }
 
         gameDisplay = GameDisplay(player, displayMetrics.widthPixels, displayMetrics.heightPixels)
+
+        //Initialise tileMap
+        tileMap = TileMap(spriteSheet)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -212,6 +219,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         performance.drawUPS(canvas)
         performance.drawFPS(canvas)
 
+
+        //draw tileMap
+        tileMap.draw(canvas, gameDisplay)
+
         //draw game objects
         player.draw(canvas, gameDisplay)
 
@@ -234,6 +245,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         if (player.getHealthPoints() <= 0) {
             gameOver.draw(canvas)
         }
+
+
 
     }
 

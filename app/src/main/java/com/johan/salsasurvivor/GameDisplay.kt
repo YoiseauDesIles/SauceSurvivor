@@ -1,9 +1,11 @@
 package com.johan.salsasurvivor
 
+import android.graphics.Rect
 import com.johan.salsasurvivor.gameobject.GameObject
 
-class GameDisplay(private val centerObject : GameObject, widthPixels : Int, heightPixels : Int) {
+class GameDisplay(private val centerObject : GameObject, private val widthPixels : Int, private val heightPixels : Int) {
 
+    val DISPLAY_RECT: Rect = Rect(0, 0, widthPixels, heightPixels)
     private var gameToDisplayCoordinatesOffsetX: Double = 0.0
     private var gameToDisplayCoordinatesOffsetY: Double = 0.0
     private var displayCenterX: Double = 0.0
@@ -30,6 +32,15 @@ class GameDisplay(private val centerObject : GameObject, widthPixels : Int, heig
 
     fun gameToDisplayCoordinatesY(y: Double): Double {
         return y + gameToDisplayCoordinatesOffsetY
+    }
+
+    fun getGameRect(): Rect {
+        return Rect(
+            (gameCenterX - widthPixels / 2).toInt(),
+            (gameCenterY - heightPixels / 2).toInt(),
+            (gameCenterX + widthPixels / 2).toInt(),
+            (gameCenterY + heightPixels / 2).toInt()
+        )
     }
 
 }

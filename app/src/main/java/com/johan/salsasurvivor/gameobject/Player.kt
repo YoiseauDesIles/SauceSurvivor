@@ -9,14 +9,17 @@ import com.johan.salsasurvivor.gamepanel.Joystick
 import com.johan.salsasurvivor.R
 import com.johan.salsasurvivor.Utils
 import com.johan.salsasurvivor.gamepanel.HealthBar
+import com.johan.salsasurvivor.graphics.Animator
 import com.johan.salsasurvivor.graphics.Sprite
 
-class Player(context : Context,
-             private val joystick: Joystick,
-             positionX : Double,
-             positionY : Double,
-             radius : Double,
-             private val sprite: Sprite) :
+class Player(
+    context: Context,
+    private val joystick: Joystick,
+    positionX: Double,
+    positionY: Double,
+    radius: Double,
+    private val animator: Animator
+) :
     Circle(
         context,
         ContextCompat.getColor(context, R.color.player),
@@ -27,6 +30,7 @@ class Player(context : Context,
     private val healthBar : HealthBar = HealthBar(context, this)
     private val MAX_SPEED : Double = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS
     private var healthPoints : Int = Player.MAX_HEALTH_POINTS
+    private var playerState : PlayerState = PlayerState(this)
 
 
     init {
@@ -50,15 +54,13 @@ class Player(context : Context,
             directionX = velocityX / distance
             directionY = velocityY / distance
         }
+
+        playerState.update()
     }
 
     public override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
 
-        sprite.draw(
-            canvas,
-            gameDisplay.gameToDisplayCoordinatesX(getPositionX()).toInt() - sprite.getWidth()/2,
-            gameDisplay.gameToDisplayCoordinatesY(getPositionY()).toInt() - sprite.getHeight()/2
-        )
+        animator.draw(canvas, gameDisplay, this);
         healthBar.draw(canvas, gameDisplay)
 
     }
@@ -71,6 +73,8 @@ class Player(context : Context,
         if (healthPoints >= 0)
             this.healthPoints = healthPoints
     }
+
+    fun getPlayerState() = playerState
 
     companion object{
         public const val SPEED_PIXELS_PER_SECOND = 400.0
